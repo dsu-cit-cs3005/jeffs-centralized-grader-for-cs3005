@@ -1,5 +1,6 @@
 name: ut-cs-3005-functionality-check
-on: [push]
+on:
+  workflow_call: {}   # <-- makes this reusable from other repos
 jobs:
 
 ##########################################################################
