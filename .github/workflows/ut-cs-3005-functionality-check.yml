@@ -1,22 +1,11 @@
 name: ut-cs-3005-functionality-check
 on:
-  workflow_call: {}   # <-- makes this reusable from other repos
+  workflow_call: {}
+
 jobs:
-
-##########################################################################
-
-  pull-code:
-    name: Pull source code
-    runs-on: self-hosted
-    steps:
-      - uses: actions/checkout@v3
-        
-##########################################################################
-
   hello-enabled:
     name: Hello enabled?
     runs-on: self-hosted
-    needs: [pull-code]
     continue-on-error: true
     outputs:
       output1: ${{ steps.step1.outcome }}
@@ -24,24 +13,23 @@ jobs:
       PROGRAM: hello
       ASSIGNMENT: hello
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Enabled?
         id: step1
         run: grade_manager --cmd enabled --programs ${{ env.ASSIGNMENT }} --verbose
-        
+
   hello-check:
     name: Hello
     runs-on: self-hosted
     needs: [hello-enabled]
-    continue-on-error: false
     if: ${{ needs.hello-enabled.outputs.output1 == 'success' }}
     env:
       PROGRAM: hello
       ASSIGNMENT: hello
     steps:
+      - uses: actions/checkout@v4     # ← REQUIRED so the job sees your repo files (e.g., src/)
       - run: grade_manager --cmd make --programs ${{ env.PROGRAM }} --verbose
       - run: grade_manager --cmd grade-text --programs ${{ env.PROGRAM }} --acceptance-tests-location ${{ env.ASSIGNMENT }}/acceptance_tests --verbose
-        
 ##########################################################################
 
 #  questions-3-enabled:
