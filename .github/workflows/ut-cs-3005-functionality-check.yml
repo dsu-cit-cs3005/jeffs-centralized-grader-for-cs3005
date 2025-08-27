@@ -13,7 +13,10 @@ jobs:
       PROGRAM: hello
       ASSIGNMENT: hello
     steps:
-      - uses: actions/checkout@v4
+      - &checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Enabled?
         id: step1
         run: grade_manager --cmd enabled --programs ${{ env.ASSIGNMENT }} --verbose
@@ -58,7 +61,7 @@ jobs:
       ASSIGNMENT: questions_3
       ASSIGNMENT_NUMBER: 1
     steps:
-      - uses: actions/checkout@v4
+      - *checkout
       - run: grade_manager --cmd make --programs ${{ env.PROGRAM }} --verbose
       - run: grade_manager --cmd grade-text --programs ${{ env.PROGRAM }} --acceptance-tests-location ${{ env.ASSIGNMENT }}/acceptance_tests --verbose
         
@@ -73,7 +76,7 @@ jobs:
     env:
       ASSIGNMENT: questions_3_unit_tests
     steps:
-      - uses: actions/checkout@v4
+      - *checkout
       - name: Enabled?
         id: step1
         run: grade_manager --cmd enabled --programs ${{ env.ASSIGNMENT }} --verbose
@@ -87,7 +90,7 @@ jobs:
     env:
       ASSIGNMENT_NUMBER: 1
     steps:
-      - uses: actions/checkout@v4
+      - *checkout
       - run: grade_manager --cmd unit-test --unit-test-working-directory ${{ github.workspace }} --unit-test-assignment-number ${{ env.ASSIGNMENT_NUMBER }} --verbose
         
 ##########################################################################
@@ -102,7 +105,7 @@ jobs:
       PROGRAM: ascii_image
       ASSIGNMENT: ascii_image
     steps:
-      - uses: actions/checkout@v4
+      - *checkout
       - name: Enabled?
         id: step1
         run: grade_manager --cmd enabled --programs ${{ env.ASSIGNMENT }} --verbose
@@ -131,7 +134,7 @@ jobs:
     env:
       ASSIGNMENT: ascii_image_unit_tests
     steps:
-      - uses: actions/checkout@v3
+      - *checkout
       - name: Enabled?
         id: step1
         run: grade_manager --cmd enabled --programs ${{ env.ASSIGNMENT }} --verbose
@@ -145,6 +148,7 @@ jobs:
     env:
       ASSIGNMENT_NUMBER: 2
     steps:
+      - *checkout
       - run: grade_manager --cmd unit-test --unit-test-working-directory ${{ github.repository }} --unit-test-assignment-number ${{ env.ASSIGNMENT_NUMBER }} --verbose
 
 ###########################################################################        
