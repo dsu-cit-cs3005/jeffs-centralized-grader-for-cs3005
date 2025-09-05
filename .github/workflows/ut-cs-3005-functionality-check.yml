@@ -31,7 +31,6 @@ jobs:
       PROGRAM: hello
       ASSIGNMENT: hello
     steps:
-      - uses: actions/checkout@v4     # ← REQUIRED so the job sees your repo files (e.g., src/)
       - run: grade_manager --cmd make --programs ${{ env.PROGRAM }} --verbose
       - run: grade_manager --cmd grade-text --programs ${{ env.PROGRAM }} --acceptance-tests-location ${{ env.ASSIGNMENT }}/acceptance_tests --verbose
 ##########################################################################
@@ -62,7 +61,6 @@ jobs:
       ASSIGNMENT: questions_3
       ASSIGNMENT_NUMBER: 1
     steps:
-      - *checkout
       - run: grade_manager --cmd make --programs ${{ env.PROGRAM }} --verbose
       - run: grade_manager --cmd grade-text --programs ${{ env.PROGRAM }} --acceptance-tests-location ${{ env.ASSIGNMENT }}/acceptance_tests --verbose
         
@@ -77,7 +75,6 @@ jobs:
     env:
       ASSIGNMENT: questions_3_unit_tests
     steps:
-      - *checkout
       - name: Enabled?
         id: step1
         run: grade_manager --cmd enabled --programs ${{ env.ASSIGNMENT }} --verbose
@@ -91,7 +88,6 @@ jobs:
     env:
       ASSIGNMENT_NUMBER: 1
     steps:
-      - *checkout
       - run: grade_manager --cmd unit-test --unit-test-working-directory ${{ github.workspace }} --unit-test-assignment-number ${{ env.ASSIGNMENT_NUMBER }} --verbose
         
 ##########################################################################
@@ -135,7 +131,6 @@ jobs:
     env:
       ASSIGNMENT: ascii_image_unit_tests
     steps:
-      - *checkout
       - name: Enabled?
         id: step1
         run: grade_manager --cmd enabled --programs ${{ env.ASSIGNMENT }} --verbose
@@ -149,7 +144,6 @@ jobs:
     env:
       ASSIGNMENT_NUMBER: 2
     steps:
-      - *checkout
       - run: grade_manager --cmd unit-test --unit-test-working-directory ${{ github.repository }} --unit-test-assignment-number ${{ env.ASSIGNMENT_NUMBER }} --verbose
 
 ###########################################################################        
