@@ -210,7 +210,7 @@ jobs:
   image-file-unit-tests:
     name: Image File Unit Tests
     runs-on: self-hosted
-    
+    needs: [image-file-unit-tests-enabled]
     continue-on-error: false
     if: ${{ needs.image-file-unit-tests-enabled.outputs.output1 == 'success' }}
     env:
