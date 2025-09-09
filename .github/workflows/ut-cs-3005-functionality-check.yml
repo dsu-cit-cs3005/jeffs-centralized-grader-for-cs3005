@@ -1,5 +1,7 @@
 name: ut-cs-3005-functionality-check
-on: [push]
+on: 
+  push:
+  workflow_call:
 jobs:
 
 ##########################################################################
