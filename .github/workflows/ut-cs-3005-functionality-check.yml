@@ -10,7 +10,13 @@ jobs:
     name: Pull source code
     runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Upload repository as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: repo
+          path: .
         
 ##########################################################################
 
@@ -25,7 +31,6 @@ jobs:
       PROGRAM: hello
       ASSIGNMENT: hello
     steps:
-      - uses: actions/checkout@v3
       - name: Enabled?
         id: step1
         run: grade_manager --cmd enabled --programs ${{ env.ASSIGNMENT }} --verbose
@@ -40,6 +45,10 @@ jobs:
       PROGRAM: hello
       ASSIGNMENT: hello
     steps:
+      - name: Download repository artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: repo
       - run: grade_manager --cmd make --programs ${{ env.PROGRAM }} --verbose
       - run: grade_manager --cmd grade-text --programs ${{ env.PROGRAM }} --acceptance-tests-location ${{ env.ASSIGNMENT }}/acceptance_tests --verbose
         
@@ -56,7 +65,6 @@ jobs:
       PROGRAM: questions_3
       ASSIGNMENT: questions_3
     steps:
-      - uses: actions/checkout@v3
       - name: Enabled?
         id: step1
         run: grade_manager --cmd enabled --programs ${{ env.ASSIGNMENT }} --verbose
@@ -72,6 +80,10 @@ jobs:
       ASSIGNMENT: questions_3
       ASSIGNMENT_NUMBER: 1
     steps:
+      - name: Download repository artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: repo
       - run: grade_manager --cmd make --programs ${{ env.PROGRAM }} --verbose
       - run: grade_manager --cmd grade-text --programs ${{ env.PROGRAM }} --acceptance-tests-location ${{ env.ASSIGNMENT }}/acceptance_tests --verbose
         
@@ -86,7 +98,6 @@ jobs:
     env:
       ASSIGNMENT: questions_3_unit_tests
     steps:
-      - uses: actions/checkout@v3
       - name: Enabled?
         id: step1
         run: grade_manager --cmd enabled --programs ${{ env.ASSIGNMENT }} --verbose
@@ -100,6 +111,10 @@ jobs:
     env:
       ASSIGNMENT_NUMBER: 1
     steps:
+      - name: Download repository artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: repo
       - run: grade_manager --cmd unit-test --unit-test-working-directory ${{ github.repository }} --unit-test-assignment-number ${{ env.ASSIGNMENT_NUMBER }} --verbose
         
 ##########################################################################
@@ -115,7 +130,6 @@ jobs:
       PROGRAM: ascii_image
       ASSIGNMENT: ascii_image
     steps:
-      - uses: actions/checkout@v3
       - name: Enabled?
         id: step1
         run: grade_manager --cmd enabled --programs ${{ env.ASSIGNMENT }} --verbose
@@ -131,6 +145,10 @@ jobs:
       ASSIGNMENT: ascii_image
       ASSIGNMENT_NUMBER: 2
     steps:
+      - name: Download repository artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: repo
       - run: grade_manager --cmd make --programs ${{ env.PROGRAM }} --verbose
       - run: grade_manager --cmd grade-text --programs ${{ env.PROGRAM }} --acceptance-tests-location ${{ env.ASSIGNMENT }}/acceptance_tests --verbose
 
@@ -144,7 +162,6 @@ jobs:
     env:
       ASSIGNMENT: ascii_image_unit_tests
     steps:
-      - uses: actions/checkout@v3
       - name: Enabled?
         id: step1
         run: grade_manager --cmd enabled --programs ${{ env.ASSIGNMENT }} --verbose
@@ -158,6 +175,10 @@ jobs:
     env:
       ASSIGNMENT_NUMBER: 2
     steps:
+      - name: Download repository artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: repo
       - run: grade_manager --cmd unit-test --unit-test-working-directory ${{ github.repository }} --unit-test-assignment-number ${{ env.ASSIGNMENT_NUMBER }} --verbose
 
 ##########################################################################        
@@ -173,7 +194,6 @@ jobs:
       PROGRAM: image_file
       ASSIGNMENT: image_file
     steps:
-      - uses: actions/checkout@v3
       - name: Enabled?
         id: step1
         run: grade_manager --cmd enabled --programs ${{ env.ASSIGNMENT }} --verbose
@@ -189,6 +209,10 @@ jobs:
       ASSIGNMENT: image_file
       ASSIGNMENT_NUMBER: 3
     steps:
+      - name: Download repository artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: repo
       - run: grade_manager --cmd make --programs ${{ env.PROGRAM }} --verbose
       - run: grade_manager --cmd grade-ppm --programs ${{ env.PROGRAM }} --acceptance-tests-location ${{ env.ASSIGNMENT }}/acceptance_tests --image-location images --image-link images --verbose
         
@@ -202,7 +226,6 @@ jobs:
     env:
       ASSIGNMENT: image_file_unit_tests
     steps:
-      - uses: actions/checkout@v3
       - name: Enabled?
         id: step1
         run: grade_manager --cmd enabled --programs ${{ env.ASSIGNMENT }} --verbose
@@ -216,6 +239,10 @@ jobs:
     env:
       ASSIGNMENT_NUMBER: 3
     steps:
+      - name: Download repository artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: repo
       - run: grade_manager --cmd unit-test --unit-test-working-directory ${{ github.repository }} --unit-test-assignment-number ${{ env.ASSIGNMENT_NUMBER }} --verbose
         
 ########################################################################## 
