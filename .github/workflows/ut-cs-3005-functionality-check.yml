@@ -246,3 +246,63 @@ jobs:
       - run: grade_manager --cmd unit-test --unit-test-working-directory ${{ github.repository }} --unit-test-assignment-number ${{ env.ASSIGNMENT_NUMBER }} --verbose
         
 ########################################################################## 
+        
+  action-data-menu-data-enabled:
+    name: ActionData/MenuData enabled?
+    runs-on: self-hosted
+    needs: [pull-code]
+    continue-on-error: true
+    outputs:
+      output1: ${{ steps.step1.outcome }}
+    env:
+      ASSIGNMENT: action_data_menu_data_unit_tests
+    steps:
+      - uses: actions/checkout@v3
+      - name: Enabled?
+        id: step1
+        run: grade_manager --cmd enabled --programs ${{ env.ASSIGNMENT }} --verbose
+        
+  action-data-menu-data-check:
+    name: ActionData, MenuData, PPM::readStream
+    runs-on: self-hosted
+    needs: [action-data-menu-data-enabled]
+    continue-on-error: false
+    if: ${{ needs.action-data-menu-data-enabled.outputs.output1 == 'success' }}
+    env:
+      ASSIGNMENT_NUMBER: 4
+    steps:
+      - run: grade_manager --cmd unit-test --unit-test-working-directory ${{ github.repository }} --unit-test-assignment-number ${{ env.ASSIGNMENT_NUMBER }} --verbose
+        
+##########################################################################        
+
+  ppm-menu-enabled:
+    name: PPM Menu enabled?
+    runs-on: self-hosted
+    needs: [pull-code]
+    continue-on-error: true
+    outputs:
+      output1: ${{ steps.step1.outcome }}
+    env:
+      PROGRAM: ppm_menu
+      ASSIGNMENT: ppm_menu
+    steps:
+      - uses: actions/checkout@v3
+      - name: Enabled?
+        id: step1
+        run: grade_manager --cmd enabled --programs ${{ env.ASSIGNMENT }} --verbose
+        
+  ppm-menu-check:
+    name: PPM Menu
+    runs-on: self-hosted
+    needs: [ppm-menu-enabled]
+    continue-on-error: false
+    if: ${{ needs.ppm-menu-enabled.outputs.output1 == 'success' }}
+    env:
+      PROGRAM: ppm_menu
+      ASSIGNMENT: ppm_menu
+      ASSIGNMENT_NUMBER: 5
+    steps:
+      - run: grade_manager --cmd make --programs ${{ env.PROGRAM }} --verbose
+      - run: grade_manager --cmd unit-test --unit-test-working-directory ${{ github.repository }} --unit-test-assignment-number ${{ env.ASSIGNMENT_NUMBER }} --verbose --timeout 120
+      - run: grade_manager --cmd grade-ppm --programs ${{ env.PROGRAM }} --acceptance-tests-location ${{ env.ASSIGNMENT }}/acceptance_tests --image-location images --image-link images --verbose
+
