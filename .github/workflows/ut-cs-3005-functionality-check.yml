@@ -18,169 +18,6 @@ jobs:
           name: repo
           path: .
         
-##########################################################################
-
-  hello-enabled:
-    name: Hello enabled?
-    runs-on: self-hosted
-    needs: [pull-code]
-    continue-on-error: true
-    outputs:
-      output1: ${{ steps.step1.outcome }}
-    env:
-      PROGRAM: hello
-      ASSIGNMENT: hello
-    steps:
-      - name: Enabled?
-        id: step1
-        run: grade_manager --cmd enabled --programs ${{ env.ASSIGNMENT }} --verbose
-        
-  hello-check:
-    name: Hello
-    runs-on: self-hosted
-    needs: [hello-enabled]
-    continue-on-error: false
-    if: ${{ needs.hello-enabled.outputs.output1 == 'success' }}
-    env:
-      PROGRAM: hello
-      ASSIGNMENT: hello
-    steps:
-      - name: Download repository artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: repo
-      - run: grade_manager --cmd make --programs ${{ env.PROGRAM }} --verbose
-      - run: grade_manager --cmd grade-text --programs ${{ env.PROGRAM }} --acceptance-tests-location ${{ env.ASSIGNMENT }}/acceptance_tests --verbose
-        
-##########################################################################
-
-  questions-3-enabled:
-    name: Questions 3 enabled?
-    runs-on: self-hosted
-    needs: [pull-code]
-    continue-on-error: true
-    outputs:
-      output1: ${{ steps.step1.outcome }}
-    env:
-      PROGRAM: questions_3
-      ASSIGNMENT: questions_3
-    steps:
-      - name: Enabled?
-        id: step1
-        run: grade_manager --cmd enabled --programs ${{ env.ASSIGNMENT }} --verbose
-        
-  questions-3-check:
-    name: Questions 3
-    runs-on: self-hosted
-    needs: [questions-3-enabled]
-    continue-on-error: false
-    if: ${{ needs.questions-3-enabled.outputs.output1 == 'success' }}
-    env:
-      PROGRAM: questions_3
-      ASSIGNMENT: questions_3
-      ASSIGNMENT_NUMBER: 1
-    steps:
-      - name: Download repository artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: repo
-      - run: grade_manager --cmd make --programs ${{ env.PROGRAM }} --verbose
-      - run: grade_manager --cmd grade-text --programs ${{ env.PROGRAM }} --acceptance-tests-location ${{ env.ASSIGNMENT }}/acceptance_tests --verbose
-        
-  questions-3-unit-tests-enabled:
-    name: Questions 3 unit tests enabled?
-    runs-on: self-hosted
-    needs: [questions-3-enabled]
-    continue-on-error: true
-    if: ${{ needs.questions-3-enabled.outputs.output1 == 'success' }}
-    outputs:
-      output1: ${{ steps.step1.outcome }}
-    env:
-      ASSIGNMENT: questions_3_unit_tests
-    steps:
-      - name: Enabled?
-        id: step1
-        run: grade_manager --cmd enabled --programs ${{ env.ASSIGNMENT }} --verbose
-        
-  questions-3-unit-tests:
-    name: Questions 3 Unit Tests
-    runs-on: self-hosted
-    needs: [questions-3-unit-tests-enabled]
-    continue-on-error: false
-    if: ${{ needs.questions-3-unit-tests-enabled.outputs.output1 == 'success' }}
-    env:
-      ASSIGNMENT_NUMBER: 1
-    steps:
-      - name: Download repository artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: repo
-      - run: grade_manager --cmd unit-test --unit-test-working-directory ${{ github.repository }} --unit-test-assignment-number ${{ env.ASSIGNMENT_NUMBER }} --verbose
-        
-##########################################################################
-
-  ascii-image-enabled:
-    name: ASCII Image enabled?
-    runs-on: self-hosted
-    needs: [pull-code]
-    continue-on-error: true
-    outputs:
-      output1: ${{ steps.step1.outcome }}
-    env:
-      PROGRAM: ascii_image
-      ASSIGNMENT: ascii_image
-    steps:
-      - name: Enabled?
-        id: step1
-        run: grade_manager --cmd enabled --programs ${{ env.ASSIGNMENT }} --verbose
-        
-  ascii-image-check:
-    name: ASCII Image
-    runs-on: self-hosted
-    needs: [ascii-image-enabled]
-    continue-on-error: false
-    if: ${{ needs.ascii-image-enabled.outputs.output1 == 'success' }}
-    env:
-      PROGRAM: ascii_image
-      ASSIGNMENT: ascii_image
-      ASSIGNMENT_NUMBER: 2
-    steps:
-      - name: Download repository artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: repo
-      - run: grade_manager --cmd make --programs ${{ env.PROGRAM }} --verbose
-      - run: grade_manager --cmd grade-text --programs ${{ env.PROGRAM }} --acceptance-tests-location ${{ env.ASSIGNMENT }}/acceptance_tests --verbose
-
-  ascii-image-unit-tests-enabled:
-    name: ASCII Image unit tests enabled?
-    runs-on: self-hosted
-    needs: [ascii-image-enabled]
-    continue-on-error: true
-    outputs:
-      output1: ${{ steps.step1.outcome }}
-    env:
-      ASSIGNMENT: ascii_image_unit_tests
-    steps:
-      - name: Enabled?
-        id: step1
-        run: grade_manager --cmd enabled --programs ${{ env.ASSIGNMENT }} --verbose
-        
-  ascii-image-unit-tests:
-    name: ASCII Image Unit Tests
-    runs-on: self-hosted
-    needs: [ascii-image-unit-tests-enabled]
-    continue-on-error: false
-    if: ${{ needs.ascii-image-unit-tests-enabled.outputs.output1 == 'success' }}
-    env:
-      ASSIGNMENT_NUMBER: 2
-    steps:
-      - name: Download repository artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: repo
-      - run: grade_manager --cmd unit-test --unit-test-working-directory ${{ github.repository }} --unit-test-assignment-number ${{ env.ASSIGNMENT_NUMBER }} --verbose
-
 ##########################################################################        
         
   image-file-enabled:
@@ -372,4 +209,36 @@ jobs:
       - run: grade_manager --cmd unit-test --unit-test-working-directory ${{ github.repository }} --unit-test-assignment-number ${{ env.ASSIGNMENT_NUMBER }} --verbose --timeout 120
       - run: grade_manager --cmd grade-ppm --programs ${{ env.PROGRAM }} --acceptance-tests-location ${{ env.ASSIGNMENT }}/acceptance_tests --image-location images --image-link images --verbose
         
-##########################################################################        
+##########################################################################  
+
+  number-grid-enabled:
+    name: Number Grid enabled?
+    runs-on: self-hosted
+    needs: [pull-code]
+    continue-on-error: true
+    outputs:
+      output1: ${{ steps.step1.outcome }}
+    env:
+      ASSIGNMENT: number-grid
+    steps:
+      - uses: actions/checkout@v3
+      - name: Enabled?
+        id: step1
+        run: grade_manager --cmd enabled --programs ${{ env.ASSIGNMENT }} --verbose
+        
+  number-grid-check:
+    name: Number Grid
+    runs-on: self-hosted
+    needs: [number-grid-enabled]
+    continue-on-error: false
+    if: ${{ needs.number-grid-enabled.outputs.output1 == 'success' }}
+    env:
+      PROGRAM: ppm_menu
+      ASSIGNMENT: number-grid
+      ASSIGNMENT_NUMBER: 8
+    steps:
+      - run: grade_manager --cmd make --programs ${{ env.PROGRAM }} --verbose
+      - run: grade_manager --cmd unit-test --unit-test-working-directory ${{ github.repository }} --unit-test-assignment-number ${{ env.ASSIGNMENT_NUMBER }} --verbose --timeout 120
+      - run: grade_manager --cmd grade-ppm --programs ${{ env.PROGRAM }} --acceptance-tests-location ${{ env.ASSIGNMENT }}/acceptance_tests --image-location images --image-link images --verbose
+        
+##########################################################################   
