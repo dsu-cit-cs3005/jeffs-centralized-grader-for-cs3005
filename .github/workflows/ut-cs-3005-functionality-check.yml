@@ -19,69 +19,9 @@ jobs:
           path: .
         
 ##########################################################################        
-        
-  image-file-enabled:
-    name: Image File enabled?
-    runs-on: self-hosted
-    needs: [pull-code]
-    continue-on-error: true
-    outputs:
-      output1: ${{ steps.step1.outcome }}
-    env:
-      PROGRAM: image_file
-      ASSIGNMENT: image_file
-    steps:
-      - name: Enabled?
-        id: step1
-        run: grade_manager --cmd enabled --programs ${{ env.ASSIGNMENT }} --verbose
-        
-  image-file-check:
-    name: Image File
-    runs-on: self-hosted
-    needs: [image-file-enabled]
-    continue-on-error: false
-    if: ${{ needs.image-file-enabled.outputs.output1 == 'success' }}
-    env:
-      PROGRAM: image_file
-      ASSIGNMENT: image_file
-      ASSIGNMENT_NUMBER: 3
-    steps:
-      - name: Download repository artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: repo
-      - run: grade_manager --cmd make --programs ${{ env.PROGRAM }} --verbose
-      - run: grade_manager --cmd grade-ppm --programs ${{ env.PROGRAM }} --acceptance-tests-location ${{ env.ASSIGNMENT }}/acceptance_tests --image-location images --image-link images --verbose
-        
-  image-file-unit-tests-enabled:
-    name: Image File unit tests enabled?
-    runs-on: self-hosted
-    needs: [image-file-enabled]
-    continue-on-error: true
-    outputs:
-      output1: ${{ steps.step1.outcome }}
-    env:
-      ASSIGNMENT: image_file_unit_tests
-    steps:
-      - name: Enabled?
-        id: step1
-        run: grade_manager --cmd enabled --programs ${{ env.ASSIGNMENT }} --verbose
-        
-  image-file-unit-tests:
-    name: Image File Unit Tests
-    runs-on: self-hosted
-    needs: [image-file-unit-tests-enabled]
-    continue-on-error: false
-    if: ${{ needs.image-file-unit-tests-enabled.outputs.output1 == 'success' }}
-    env:
-      ASSIGNMENT_NUMBER: 3
-    steps:
-      - name: Download repository artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: repo
-      - run: grade_manager --cmd unit-test --unit-test-working-directory ${{ github.repository }} --unit-test-assignment-number ${{ env.ASSIGNMENT_NUMBER }} --verbose
-        
+# Hello
+# Questions 3
+# Image File
 ########################################################################## 
         
   action-data-menu-data-enabled:
