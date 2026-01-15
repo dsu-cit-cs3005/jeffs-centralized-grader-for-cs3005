@@ -30,6 +30,7 @@ jobs:
       - uses: actions/checkout@v4     # ← REQUIRED so the job sees your repo files (e.g., src/)
       - run: grade_manager --cmd make --programs ${{ env.PROGRAM }} --verbose
       - run: grade_manager --cmd grade-text --programs ${{ env.PROGRAM }} --acceptance-tests-location ${{ env.ASSIGNMENT }}/acceptance_tests --verbose
+      
 ##########################################################################
 
   questions-3-enabled:
@@ -91,3 +92,61 @@ jobs:
       - run: grade_manager --cmd unit-test --unit-test-working-directory ${{ github.workspace }} --unit-test-assignment-number ${{ env.ASSIGNMENT_NUMBER }} --verbose
         
 ##########################################################################
+  
+  ascii-image-enabled:
+    name: ASCII Image enabled?
+    runs-on: self-hosted
+    needs: [pull-code]
+    continue-on-error: true
+    outputs:
+      output1: ${{ steps.step1.outcome }}
+    env:
+      PROGRAM: ascii_image
+      ASSIGNMENT: ascii_image
+    steps:
+      - uses: actions/checkout@v3
+      - name: Enabled?
+        id: step1
+        run: grade_manager --cmd enabled --programs ${{ env.ASSIGNMENT }} --verbose
+        
+  ascii-image-check:
+    name: ASCII Image
+    runs-on: self-hosted
+    needs: [ascii-image-enabled]
+    continue-on-error: false
+    if: ${{ needs.ascii-image-enabled.outputs.output1 == 'success' }}
+    env:
+      PROGRAM: ascii_image
+      ASSIGNMENT: ascii_image
+      ASSIGNMENT_NUMBER: 2
+    steps:
+      - run: grade_manager --cmd make --programs ${{ env.PROGRAM }} --verbose
+      - run: grade_manager --cmd grade-text --programs ${{ env.PROGRAM }} --acceptance-tests-location ${{ env.ASSIGNMENT }}/acceptance_tests --verbose
+
+  ascii-image-unit-tests-enabled:
+    name: ASCII Image unit tests enabled?
+    runs-on: self-hosted
+    needs: [ascii-image-enabled]
+    continue-on-error: true
+    outputs:
+      output1: ${{ steps.step1.outcome }}
+    env:
+      ASSIGNMENT: ascii_image_unit_tests
+    steps:
+      - uses: actions/checkout@v3
+      - name: Enabled?
+        id: step1
+        run: grade_manager --cmd enabled --programs ${{ env.ASSIGNMENT }} --verbose
+        
+  ascii-image-unit-tests:
+    name: ASCII Image Unit Tests
+    runs-on: self-hosted
+    needs: [ascii-image-unit-tests-enabled]
+    continue-on-error: false
+    if: ${{ needs.ascii-image-unit-tests-enabled.outputs.output1 == 'success' }}
+    env:
+      ASSIGNMENT_NUMBER: 2
+    steps:
+      - run: grade_manager --cmd unit-test --unit-test-working-directory ${{ github.repository }} --unit-test-assignment-number ${{ env.ASSIGNMENT_NUMBER }} --verbose
+
+########################################################################## 
