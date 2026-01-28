@@ -155,7 +155,6 @@ jobs:
   image-file-enabled:
     name: Image File enabled?
     runs-on: self-hosted
-    needs: [pull-code]
     continue-on-error: true
     outputs:
       output1: ${{ steps.step1.outcome }}
