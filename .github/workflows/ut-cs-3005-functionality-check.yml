@@ -3,35 +3,29 @@ on:
   workflow_call: {}
 
 jobs:
-  ppm-menu-enabled:
-    name: PPM Menu enabled?
-    runs-on: self-hosted
-    continue-on-error: true
-    outputs:
-      output1: ${{ steps.step1.outcome }}
-    env:
-      PROGRAM: ppm_menu
-      ASSIGNMENT: ppm_menu
-    steps:
-      - uses: actions/checkout@v3
-      - name: Enabled?
-        id: step1
-        run: grade_manager --cmd enabled --programs ${{ env.ASSIGNMENT }} --verbose
-        
-  ppm-menu-check:
+    ppm-menu-check:
     name: PPM Menu
     runs-on: self-hosted
     needs: [ppm-menu-enabled]
-    continue-on-error: false
     if: ${{ needs.ppm-menu-enabled.outputs.output1 == 'success' }}
     env:
       PROGRAM: ppm_menu
       ASSIGNMENT: ppm_menu
       ASSIGNMENT_NUMBER: 5
     steps:
-      - run: grade_manager --cmd make --programs ${{ env.PROGRAM }} --verbose
-      - run: grade_manager --cmd unit-test --unit-test-working-directory ${{ github.repository }} --unit-test-assignment-number ${{ env.ASSIGNMENT_NUMBER }} --verbose --timeout 120
-      - run: grade_manager --cmd grade-ppm --programs ${{ env.PROGRAM }} --acceptance-tests-location ${{ env.ASSIGNMENT }}/acceptance_tests --image-location images --image-link images --verbose
+      - uses: actions/checkout@v3
+
+      - name: Clean
+        run: make clean || true
+
+      - name: Build
+        run: grade_manager --cmd make --programs ${{ env.PROGRAM }} --verbose
+
+      - name: Unit Tests
+        run: grade_manager --cmd unit-test --unit-test-working-directory ${{ github.repository }} --unit-test-assignment-number ${{ env.ASSIGNMENT_NUMBER }} --verbose --timeout 120
+
+      - name: Grade
+        run: grade_manager --cmd grade-ppm --programs ${{ env.PROGRAM }} --acceptance-tests-location ${{ env.ASSIGNMENT }}/acceptance_tests --image-location images --image-link images --verbose
         
 ########################################################################## 
         
