@@ -3,9 +3,6 @@ on:
   workflow_call: {}
 
 jobs:
-
-##########################################################################        
-
   ppm-menu-enabled:
     name: PPM Menu enabled?
     runs-on: self-hosted
