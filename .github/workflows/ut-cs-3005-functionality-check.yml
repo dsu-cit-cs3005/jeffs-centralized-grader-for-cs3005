@@ -6,7 +6,6 @@ jobs:
   ppm-menu-enabled:
     name: PPM Menu enabled?
     runs-on: self-hosted
-    needs: [pull-code]
     continue-on-error: true
     outputs:
       output1: ${{ steps.step1.outcome }}
