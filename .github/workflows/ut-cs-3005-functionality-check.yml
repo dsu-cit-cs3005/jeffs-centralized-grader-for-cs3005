@@ -4,7 +4,6 @@ on:
 
 jobs:
   ppm-menu-enabled:
-    name: PPM Menu enabled?
     runs-on: self-hosted
     continue-on-error: true
     outputs:
@@ -13,25 +12,45 @@ jobs:
       PROGRAM: ppm_menu
       ASSIGNMENT: ppm_menu
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.sha }}
+
+      - name: Clean workspace
+        run: |
+          git reset --hard
+          git clean -ffdx
+
       - name: Enabled?
         id: step1
         run: grade_manager --cmd enabled --programs ${{ env.ASSIGNMENT }} --verbose
-        
+
   ppm-menu-check:
-    name: PPM Menu
     runs-on: self-hosted
     needs: [ppm-menu-enabled]
-    continue-on-error: false
     if: ${{ needs.ppm-menu-enabled.outputs.output1 == 'success' }}
     env:
       PROGRAM: ppm_menu
       ASSIGNMENT: ppm_menu
       ASSIGNMENT_NUMBER: 5
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.sha }}
+
+      - name: Clean workspace
+        run: |
+          git reset --hard
+          git clean -ffdx
+
+      - name: Show what is being tested (proof)
+        run: |
+          echo "REF=$GITHUB_REF"
+          echo "SHA=$GITHUB_SHA"
+          git log -1 --oneline
+
       - run: grade_manager --cmd make --programs ${{ env.PROGRAM }} --verbose
       - run: grade_manager --cmd unit-test --unit-test-working-directory ${{ github.repository }} --unit-test-assignment-number ${{ env.ASSIGNMENT_NUMBER }} --verbose --timeout 120
       - run: grade_manager --cmd grade-ppm --programs ${{ env.PROGRAM }} --acceptance-tests-location ${{ env.ASSIGNMENT }}/acceptance_tests --image-location images --image-link images --verbose
-        
-########################################################################## 
-        
