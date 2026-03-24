@@ -1,8 +1,17 @@
 name: ut-cs-3005-functionality-check
-on:
-  workflow_call: {}
-
+on: [push]
 jobs:
+
+##########################################################################
+
+  pull-code:
+    name: Pull source code
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v3
+      
+##########################################################################
+
   ppm-menu-enabled:
     name: PPM Menu enabled?
     runs-on: self-hosted
