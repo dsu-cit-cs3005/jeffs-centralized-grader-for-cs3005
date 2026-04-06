@@ -110,7 +110,7 @@ jobs:
 
 ##########################################################################        
 
-mandelbrot-set-enabled:
+  mandelbrot-set-enabled:
     name: Mandelbrot Set enabled?
     runs-on: self-hosted
     needs: [pull-code]
