@@ -113,7 +113,6 @@ jobs:
   mandelbrot-set-enabled:
     name: Mandelbrot Set enabled?
     runs-on: self-hosted
-    needs: [pull-code]
     continue-on-error: true
     outputs:
       output1: ${{ steps.step1.outcome }}
