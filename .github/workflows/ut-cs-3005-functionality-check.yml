@@ -51,6 +51,7 @@ jobs:
   complex-fractal-enabled:
     name: Complex Fractal enabled?
     runs-on: self-hosted
+    needs: [pull-code]
     continue-on-error: true
     outputs:
       output1: ${{ steps.step1.outcome }}
@@ -65,7 +66,7 @@ jobs:
   complex-fractal-check:
     name: Complex Fractal
     runs-on: self-hosted
-    needs: [complex-fractal-enabled]
+    needs: [ppm-menu-check, complex-fractal-enabled]
     continue-on-error: false
     if: ${{ needs.complex-fractal-enabled.outputs.output1 == 'success' }}
     env:
@@ -82,6 +83,7 @@ jobs:
   julia-set-enabled:
     name: Julia Set enabled?
     runs-on: self-hosted
+    needs: [pull-code]
     continue-on-error: true
     outputs:
       output1: ${{ steps.step1.outcome }}
@@ -96,7 +98,7 @@ jobs:
   julia-set-check:
     name: Julia Set
     runs-on: self-hosted
-    needs: [julia-set-enabled]
+    needs: [ppm-menu-check, julia-set-enabled]
     continue-on-error: false
     if: ${{ needs.julia-set-enabled.outputs.output1 == 'success' }}
     env:
@@ -113,6 +115,7 @@ jobs:
   mandelbrot-set-enabled:
     name: Mandelbrot Set enabled?
     runs-on: self-hosted
+    needs: [pull-code]
     continue-on-error: true
     outputs:
       output1: ${{ steps.step1.outcome }}
@@ -127,7 +130,7 @@ jobs:
   mandelbrot-set-check:
     name: Mandelbrot Set
     runs-on: self-hosted
-    needs: [mandelbrot-set-enabled]
+    needs: [ppm-menu-check, mandelbrot-set-enabled]
     continue-on-error: false
     if: ${{ needs.mandelbrot-set-enabled.outputs.output1 == 'success' }}
     env:
