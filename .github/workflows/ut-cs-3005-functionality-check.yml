@@ -66,7 +66,7 @@ jobs:
   complex-fractal-check:
     name: Complex Fractal
     runs-on: self-hosted
-    needs: [ppm-menu-check, complex-fractal-enabled]
+    needs: [complex-fractal-enabled]
     continue-on-error: false
     if: ${{ needs.complex-fractal-enabled.outputs.output1 == 'success' }}
     env:
@@ -98,7 +98,7 @@ jobs:
   julia-set-check:
     name: Julia Set
     runs-on: self-hosted
-    needs: [ppm-menu-check, julia-set-enabled]
+    needs: [julia-set-enabled]
     continue-on-error: false
     if: ${{ needs.julia-set-enabled.outputs.output1 == 'success' }}
     env:
@@ -130,7 +130,7 @@ jobs:
   mandelbrot-set-check:
     name: Mandelbrot Set
     runs-on: self-hosted
-    needs: [ppm-menu-check, mandelbrot-set-enabled]
+    needs: [mandelbrot-set-enabled]
     continue-on-error: false
     if: ${{ needs.mandelbrot-set-enabled.outputs.output1 == 'success' }}
     env:
