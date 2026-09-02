@@ -74,6 +74,7 @@ jobs:
       ASSIGNMENT: questions_3
       ASSIGNMENT_NUMBER: 1
     steps:
+      - uses: actions/checkout@v3
       - run: grade_manager --cmd make --programs ${{ env.PROGRAM }} --verbose
       - run: grade_manager --cmd grade-text --programs ${{ env.PROGRAM }} --acceptance-tests-location ${{ env.ASSIGNMENT }}/acceptance_tests --verbose
         
@@ -102,6 +103,7 @@ jobs:
     env:
       ASSIGNMENT_NUMBER: 1
     steps:
+      - uses: actions/checkout@v3
       - run: grade_manager --cmd unit-test --unit-test-working-directory ${{ github.repository }} --unit-test-assignment-number ${{ env.ASSIGNMENT_NUMBER }} --verbose
 
 ####################################################################################################################################################
