@@ -167,7 +167,7 @@ jobs:
 
 ##########################################################################        
 
-image-file-enabled:
+  image-file-enabled:
     name: Image File enabled?
     runs-on: self-hosted
     needs: [pull-code]
