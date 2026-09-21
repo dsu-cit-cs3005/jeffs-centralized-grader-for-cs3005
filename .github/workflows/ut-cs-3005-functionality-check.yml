@@ -182,7 +182,7 @@ jobs:
       - name: Enabled?
         id: step1
         run: grade_manager --cmd enabled --programs ${{ env.ASSIGNMENT }} --verbose
-        
+  
   image-file-check:
     name: Image File
     runs-on: self-hosted
