@@ -289,7 +289,8 @@ jobs:
       - run: grade_manager --cmd grade-ppm --programs ${{ env.PROGRAM }} --acceptance-tests-location ${{ env.ASSIGNMENT }}/acceptance_tests --image-location images --image-link images --verbose
         
 ##########################################################################
-ppm-operators-enabled:
+  
+  ppm-operators-enabled:
     name: PPM Operators enabled?
     runs-on: self-hosted
     needs: [pull-code]
