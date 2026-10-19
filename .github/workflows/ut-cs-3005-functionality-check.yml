@@ -352,6 +352,7 @@ jobs:
       ASSIGNMENT: gray-draw
       ASSIGNMENT_NUMBER: 7
     steps:
+      - uses: actions/checkout@v6
       - run: grade_manager --cmd make --programs ${{ env.PROGRAM }} --verbose
       - run: grade_manager --cmd unit-test --unit-test-working-directory ${{ github.repository }} --unit-test-assignment-number ${{ env.ASSIGNMENT_NUMBER }} --verbose --timeout 120
       - run: grade_manager --cmd grade-ppm --programs ${{ env.PROGRAM }} --acceptance-tests-location ${{ env.ASSIGNMENT }}/acceptance_tests --image-location images --image-link images --verbose
@@ -368,7 +369,7 @@ jobs:
     env:
       ASSIGNMENT: number-grid
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
       - name: Enabled?
         id: step1
         run: grade_manager --cmd enabled --programs ${{ env.ASSIGNMENT }} --verbose
@@ -384,6 +385,7 @@ jobs:
       ASSIGNMENT: number-grid
       ASSIGNMENT_NUMBER: 8
     steps:
+      - uses: actions/checkout@v6
       - run: grade_manager --cmd make --programs ${{ env.PROGRAM }} --verbose
       - run: grade_manager --cmd unit-test --unit-test-working-directory ${{ github.repository }} --unit-test-assignment-number ${{ env.ASSIGNMENT_NUMBER }} --verbose --timeout 120
       - run: grade_manager --cmd grade-ppm --programs ${{ env.PROGRAM }} --acceptance-tests-location ${{ env.ASSIGNMENT }}/acceptance_tests --image-location images --image-link images --verbose
